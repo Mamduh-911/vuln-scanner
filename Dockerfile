@@ -4,14 +4,12 @@ FROM debian:bullseye
 RUN apt-get update && apt-get install -y \
     curl git unzip python3 python3-pip golang
 
-# إعداد مسار go
-ENV GOPATH=/go
-ENV PATH=$GOPATH/bin:$PATH
-
-# تثبيت dalfox
+# dalfox باستخدام Go Modules (حل المشكلة)
+ENV PATH=$PATH:/root/go/bin
+ENV GO111MODULE=on
 RUN go install github.com/hahwul/dalfox/v2@latest
 
-# تثبيت nuclei
+# nuclei
 RUN curl -sSfL https://raw.githubusercontent.com/projectdiscovery/nuclei/v3/install.sh | sh
 ENV PATH="/root/.nuclei:$PATH"
 
@@ -19,7 +17,7 @@ ENV PATH="/root/.nuclei:$PATH"
 WORKDIR /app
 COPY . .
 
-# تثبيت البايثون
+# تثبيت مكتبات Python
 RUN pip3 install -r requirements.txt
 
 # تشغيل السيرفر

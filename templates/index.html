@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>كاشف الثغرات</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 كاشف الثغرات</h1>
+        <form method="POST" action="/scan">
+            <input type="text" name="url" placeholder="أدخل رابط الموقع" required>
+            <button type="submit">ابدأ الفحص</button>
+        </form>
+
+        {% if url %}
+        <h3>نتائج الفحص لـ: {{ url }}</h3>
+        <pre>{{ result }}</pre>
+        {% endif %}
+    </div>
+</body>
+</html>

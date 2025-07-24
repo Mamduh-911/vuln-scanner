@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
-# تثبيت أدوات النظام الأساسية
+# تثبيت الأدوات
 RUN apt-get update && apt-get install -y \
     git curl golang && \
     apt-get clean
@@ -8,11 +8,11 @@ RUN apt-get update && apt-get install -y \
 # تثبيت Flask
 RUN python3 -m pip install --break-system-packages Flask
 
-# تثبيت Dalfox
-RUN go install github.com/hahwul/dalfox/v2@latest
+# تثبيت Dalfox بإصدار متوافق
+RUN go install github.com/hahwul/dalfox/v2@v2.11.3
 ENV PATH="/root/go/bin:${PATH}"
 
-# نسخ الملفات
+# نسخ ملفات المشروع
 COPY . /app
 WORKDIR /app
 

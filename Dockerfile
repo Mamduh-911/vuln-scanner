@@ -1,20 +1,17 @@
-FROM python:3.11-slim
+# استخدم إصدار Go مستقر وحديث (1.20) على Alpine خفيف
+FROM golang:1.20-alpine
 
-# تثبيت الأدوات
-RUN apt-get update && apt-get install -y \
-    git curl golang && \
-    apt-get clean
+# ثبت git (مطلوب لتحميل الحزم)
+RUN apk add --no-cache git
 
-# تثبيت Flask
-RUN python3 -m pip install --break-system-packages Flask
+# حدد متغير بيئة لتفعيل موديلات Go
+ENV GO111MODULE=on
 
-# تثبيت Dalfox بإصدار متوافق
+# ثبت Dalfox الإصدار 2.11.3 عبر go install (يجب أن ينجح الآن)
 RUN go install github.com/hahwul/dalfox/v2@v2.11.3
+
+# أضف مسار تثبيت الأدوات إلى PATH
 ENV PATH="/root/go/bin:${PATH}"
 
-# نسخ ملفات المشروع
-COPY . /app
-WORKDIR /app
-
-# تشغيل التطبيق
-CMD ["python3", "app.py"]
+# افحص إصدار Dalfox للتأكد من التثبيت
+CMD ["dalfox", "--version"]

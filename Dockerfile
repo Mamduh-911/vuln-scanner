@@ -1,17 +1,19 @@
 FROM debian:bullseye
 
-# تثبيت الأدوات الأساسية
+# تثبيت المتطلبات
 RUN apt-get update && apt-get install -y \
     curl git unzip python3 python3-pip golang
 
-# dalfox
+# إعداد مسار go
 ENV GOPATH=/go
 ENV PATH=$GOPATH/bin:$PATH
+
+# تثبيت dalfox
 RUN go install github.com/hahwul/dalfox/v2@latest
 
-# nuclei
+# تثبيت nuclei
 RUN curl -sSfL https://raw.githubusercontent.com/projectdiscovery/nuclei/v3/install.sh | sh
-ENV PATH="/root/.nuclei:${PATH}"
+ENV PATH="/root/.nuclei:$PATH"
 
 # نسخ ملفات المشروع
 WORKDIR /app

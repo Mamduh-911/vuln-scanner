@@ -5,18 +5,22 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', results=None)
 
 @app.route('/scan', methods=['POST'])
 def scan():
     url = request.form.get('url')
-    if not url:
-        return "يرجى إدخال رابط صحيح", 400
 
-    # مثال: فحص nuclei
+    if not url:
+        return render_template('index.html', results="❌ لم يتم إدخال رابط!")
+
     try:
-        result = subprocess.check_output(['nuclei', '-u', url], text=True)
-    except Exception as e:
-        result = f"حدث خطأ أثناء الفحص: {str(e)}"
+        # Example using nuclei tool
+        result = subprocess.check_output(['nuclei', '-u', url], stderr=subprocess.STDOUT, text=True)
+    except subprocess.CalledProcessError as e:
+        result = f"⚠️ خطأ في الفحص:\n{e.output}"
 
     return render_template('index.html', results=result)
+
+if __name__ == '__main__':
+    app.run(debug=True)

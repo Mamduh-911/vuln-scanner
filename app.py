@@ -3,24 +3,17 @@ import subprocess
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html', results=None)
-
-@app.route('/scan', methods=['POST'])
-def scan():
-    url = request.form.get('url')
-
-    if not url:
-        return render_template('index.html', results="❌ لم يتم إدخال رابط!")
-
-    try:
-        # Example using nuclei tool
-        result = subprocess.check_output(['nuclei', '-u', url], stderr=subprocess.STDOUT, text=True)
-    except subprocess.CalledProcessError as e:
-        result = f"⚠️ خطأ في الفحص:\n{e.output}"
-
-    return render_template('index.html', results=result)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    result = ''
+    if request.method == 'POST':
+        url = request.form['url']
+        try:
+            result = subprocess.check_output(
+                ['dalfox', 'url', url],
+                stderr=subprocess.STDOUT,
+                text=True
+            )
+        except subprocess.CalledProcessError as e:
+            result = f"خطأ في الفحص:\n{e.output}"
+    return render_template('index.html', result=result)

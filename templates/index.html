@@ -1,52 +1,24 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <title>🔍 كاشف الثغرات</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: #eee;
-            font-family: 'Courier New', monospace;
-            text-align: center;
-            padding: 50px;
-        }
-        input[type="text"] {
-            width: 60%;
-            padding: 10px;
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 18px;
-            background-color: #00c853;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        pre {
-            text-align: left;
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 80%;
-            margin: auto;
-            overflow-x: auto;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>🔍 كاشف الثغرات</title>
+  <style>
+    body { background: #111; color: #0f0; font-family: monospace; padding: 20px; }
+    input[type="text"] { width: 100%; padding: 10px; margin-bottom: 10px; }
+    input[type="submit"] { padding: 10px 20px; }
+    pre { background: #000; padding: 15px; white-space: pre-wrap; word-wrap: break-word; }
+  </style>
 </head>
 <body>
-    <h1>🔍 كاشف الثغرات</h1>
-    <form method="POST" action="/scan">
-        <input type="text" name="url" placeholder="أدخل رابط الفحص مثل https://example.com" required>
-        <br>
-        <button type="submit">ابدأ الفحص</button>
-    </form>
-
-    {% if results %}
-        <h2>نتائج الفحص:</h2>
-        <pre>{{ results }}</pre>
-    {% endif %}
+  <h1>🔍 كاشف الثغرات</h1>
+  <form method="POST">
+    <input type="text" name="url" placeholder="أدخل الرابط للفحص" required>
+    <input type="submit" value="ابدأ الفحص">
+  </form>
+  {% if result %}
+    <h2>📄 النتائج:</h2>
+    <pre>{{ result }}</pre>
+  {% endif %}
 </body>
 </html>

@@ -5,8 +5,9 @@ RUN apt-get update && apt-get install -y \
     curl git unzip python3 python3-pip golang
 
 # dalfox
+ENV GOPATH=/go
+ENV PATH=$GOPATH/bin:$PATH
 RUN go install github.com/hahwul/dalfox/v2@latest
-ENV PATH="/root/go/bin:${PATH}"
 
 # nuclei
 RUN curl -sSfL https://raw.githubusercontent.com/projectdiscovery/nuclei/v3/install.sh | sh

@@ -1,16 +1,15 @@
-FROM python:3.9-slim
+FROM golang:1.20-alpine
 
-# تثبيت go
-RUN apt update && apt install -y golang git curl unzip
+RUN apk add --no-cache python3 py3-pip git bash curl
 
-# تثبيت nuclei
-RUN go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
+# Flask
+RUN pip install Flask
+
+# Dalfox
+RUN go install github.com/hahwul/dalfox/v2@latest
 ENV PATH="/root/go/bin:${PATH}"
 
-# نسخ الملفات
+COPY . /app
 WORKDIR /app
-COPY . .
 
-RUN pip install -r requirements.txt
-
-CMD ["python", "app.py"]
+CMD ["python3", "app.py"]

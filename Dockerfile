@@ -1,13 +1,18 @@
 FROM golang:1.20
 
-# تثبيت git + أدوات البناء C (ضروري لـ Dalfox)
+# تثبيت git + أدوات البناء
 RUN apt-get update && apt-get install -y git build-essential
 
-ENV GO111MODULE=on
-ENV GOPROXY=https://proxy.golang.org,direct
+# إنشاء مجلد العمل
+WORKDIR /app
 
-RUN go install github.com/hahwul/dalfox/v2@latest
+# جلب كود Dalfox من GitHub
+RUN git clone https://github.com/hahwul/dalfox.git . && \
+    git checkout v2.11.3 && \
+    go install .
 
+# إضافة المسار إلى PATH
 ENV PATH="/go/bin:${PATH}"
 
+# اختبار النسخة
 CMD ["dalfox", "--version"]

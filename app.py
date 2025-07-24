@@ -3,17 +3,20 @@ import subprocess
 
 app = Flask(__name__)
 
-@app.route("/", methods=["GET", "POST"])
-def home():
-    results = None
-    if request.method == "POST":
-        url = request.form["url"]
-        try:
-            output = subprocess.check_output(["python3", "scanner.py", url], text=True)
-            results = output
-        except subprocess.CalledProcessError as e:
-            results = f"حدث خطأ أثناء الفحص:\n{e}"
-    return render_template("index.html", results=results)
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+@app.route('/scan', methods=['POST'])
+def scan():
+    url = request.form.get('url')
+    if not url:
+        return "يرجى إدخال رابط صحيح", 400
+
+    # مثال: فحص nuclei
+    try:
+        result = subprocess.check_output(['nuclei', '-u', url], text=True)
+    except Exception as e:
+        result = f"حدث خطأ أثناء الفحص: {str(e)}"
+
+    return render_template('index.html', results=result)
